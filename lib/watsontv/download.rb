@@ -58,8 +58,7 @@ module WatsOnTv
     end
 
     def search_term_for(episode)
-      nr, season = episode.number.to_s.rjust(2, '0'), episode.season.to_s.rjust(2, '0')
-      "#{episode.show} S#{season}E#{nr} #{@search_term_suffix}"
+      "#{episode.show} S#{episode.season}E#{episode.number} #{@search_term_suffix}"
     end
 
   end

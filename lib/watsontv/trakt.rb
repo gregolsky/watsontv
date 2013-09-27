@@ -30,14 +30,22 @@ module WatsOnTv
 
   class EpisodeEvent
 
-    attr_reader :show, :title, :season, :number, :airtime
+    attr_reader :show, :title, :airtime
 
     def initialize(show, title, season, number, airtime)
       @show, @title, @season, @number, @airtime = show, title, season, number, airtime
     end
 
     def summary
-      "#{@show} S#{@season}E#{@number}s \"#{@title}\""
+      "#{@show} S#{season}E#{number}s \"#{@title}\""
+    end
+
+    def season
+      @season.to_s.rjust(2, '0')
+    end
+
+    def number
+      @number.to_s.rjust(2, '0') 
     end
 
   end

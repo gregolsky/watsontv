@@ -11,8 +11,8 @@ class TraktClientTests < Test::Unit::TestCase
     assert episodes.length == 1
     e = episodes[0]
     assert e.show == "Haven"
-    assert e.number == 1
-    assert e.season == 4
+    assert e.number == '01'
+    assert e.season == '04'
   end
 
 end
