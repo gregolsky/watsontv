@@ -37,7 +37,7 @@ module WatsOnTv
     end
 
     def summary
-      "#{@show} S#{season}E#{number}s \"#{@title}\""
+      "#{@show} S#{season}E#{number} \"#{@title}\""
     end
 
     def season
