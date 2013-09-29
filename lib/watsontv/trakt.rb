@@ -54,12 +54,12 @@ module WatsOnTv
 
     def self.map_calendar(json)
       json
-      .map { |date_data| self.map_date date_data }
+      .map { |timeframe| self.map_date timeframe }
       .flatten
     end
 
-    def self.map_date(date_data)
-      date_data['episodes'].map { |data| 
+    def self.map_date(timeframe)
+      timeframe['episodes'].map { |data| 
         self.map_episode data 
       }
     end
