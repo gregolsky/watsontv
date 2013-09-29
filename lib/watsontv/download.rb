@@ -50,7 +50,7 @@ module WatsOnTv
     end
 
     def current_episodes
-      @shows_provider.shows_for(CurrentTime.get - 1, 2)
+      @shows_provider.shows_for(CurrentTime.get, 1)
       .select { |e|
         !@download_marker.marked?(e) && 
         e.airtime + (@hours_after_air_time / 24.0) <= CurrentTime.get
