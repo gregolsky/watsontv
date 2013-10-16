@@ -25,6 +25,7 @@ module WatsOnTv
       episodes.each do |episode|
 
         term = search_term_for(episode)
+        puts term
         Log.info("Searching for: #{term}")
         results = @search_client.search(term)
 
@@ -58,7 +59,8 @@ module WatsOnTv
     end
 
     def search_term_for(episode)
-      "#{episode.show} S#{episode.season}E#{episode.number} #{@search_term_suffix}"
+      show_for_term = episode.show.tr('^A-Za-z0-9 .', '')
+      "#{show_for_term} S#{episode.season}E#{episode.number} #{@search_term_suffix}"
     end
 
   end
