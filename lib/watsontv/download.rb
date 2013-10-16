@@ -25,7 +25,6 @@ module WatsOnTv
       episodes.each do |episode|
 
         term = search_term_for(episode)
-        puts term
         Log.info("Searching for: #{term}")
         results = @search_client.search(term)
 
