@@ -37,6 +37,9 @@ module WatsOnTv
           @notifier.notify("#{episode.summary} could not be found.", "")
         end
       end
+    rescue StandardError => error  
+      Log.error(error)
+      raise error
     end
 
     private
@@ -60,6 +63,10 @@ module WatsOnTv
     def search_term_for(episode)
       show_for_term = episode.show.tr('^A-Za-z0-9 .', '')
       "#{show_for_term} S#{episode.season}E#{episode.number} #{@search_term_suffix}"
+    end
+    
+    def filter_search_results(results)
+    
     end
 
   end

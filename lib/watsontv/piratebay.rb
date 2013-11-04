@@ -13,10 +13,31 @@ module PirateBay
       search_url = "#{@@url}/search/#{encoded_term}/#{page}/7/0"
       web_page = WebPage.new(search_url)
       web_page.search('table#searchResult tr')
-        .map { |r| Torrent.from_table_row(r) unless r.at('a.detLink') == nil }
+        .map { |r| map_result_row(r) }
         .select { |t| t != nil }
+    rescue StandardError => e
+      raise ClientError.new(web_page, e)
+    end
+    
+    def map_result_row(row)
+      Torrent.from_table_row(row) unless row.at('a.detLink') == nil
     end
 
+  end
+  
+  class ClientError < StandardError
+    
+    attr_reader :page, :error
+    
+    def initialize(page, error)
+      @page = page
+      @error = error
+    end
+    
+    def to_s
+      "#{@error.to_s}\r\n\r\nHTML:\r\n#{@page.to_s}"
+    end
+    
   end
 
   class Torrent
@@ -56,6 +77,7 @@ module PirateBay
   end
 
   class WebPageNode
+  
     def initialize(node)
       @node = node
     end
@@ -65,7 +87,11 @@ module PirateBay
     end
     
     def WebPageNode.is_text?(node)
-      return node.is_a? Nokogiri::XML::Text
+      node.is_a? Nokogiri::XML::Text
+    end
+    
+    def to_s
+      @node.to_s
     end
   end
 
