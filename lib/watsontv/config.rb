@@ -5,20 +5,14 @@ module WatsOnTv
 
     CFG_FILE = "~/.watsontv"
 
-    MARK_FILE = "~/.watsontv_marked"
-
     def self.cfg_path
       File.expand_path(CFG_FILE)
     end
 
-    def self.mark_path
-      File.expand_path(MARK_FILE)
-    end 
-
     def self.create
         cfg = {
             'tv program export file' => '~/.today_on_tv',
-            'mark file' => MARK_FILE,
+            'download directory' => File.expand_path('~/Download'),
             'hours after air time' => 4,
             'search term suffix' => '720p',
             'smtp' => { 'host' => '', 'port' => '', 'username' => '', 'password' => '' },

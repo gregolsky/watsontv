@@ -7,11 +7,11 @@ module WatsOnTv
 
   class DownloadManager
 
-    def initialize(cfg, shows_provider, download_marker, search_client, torrent_client, notifier)
+    def initialize(cfg, shows_provider, library, search_client, torrent_client, notifier)
       @hours_after_air_time = cfg['hours after air time'].to_i;
       @search_term_suffix = cfg['search term suffix']
       @shows_provider = shows_provider
-      @download_marker = download_marker
+      @library = library
       @search_client = search_client
       @torrent_client = torrent_client
       @notifier = notifier
@@ -27,11 +27,11 @@ module WatsOnTv
         term = search_term_for(episode)
         Log.info("Searching for: #{term}")
         results = @search_client.search(term)
-
-        if results.length > 0
-          Log.info("Search results:\r\n #{results[0].inspect}")
-          add_to_download_queue results[0]
-          mark_episode_as_downloaded episode
+        download_info = filter_search_results(results)[0]
+        
+        if not download_info.nil?
+          Log.info("Search results:\r\n #{download_info.inspect}")
+          add_to_download_queue download_info
         else
           Log.info("No results for #{episode.summary}.")
           @notifier.notify("#{episode.summary} could not be found.", "")
@@ -55,7 +55,7 @@ module WatsOnTv
     def current_episodes
       @shows_provider.shows_for(CurrentTime.get, 1)
       .select { |e|
-        !@download_marker.marked?(e) && 
+        !@library.contains?(e) && 
         e.airtime + (@hours_after_air_time / 24.0) <= CurrentTime.get
       }
     end
@@ -66,7 +66,7 @@ module WatsOnTv
     end
     
     def filter_search_results(results)
-    
+      results
     end
 
   end
