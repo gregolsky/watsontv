@@ -30,10 +30,10 @@ module WatsOnTv
 
   class EpisodeEvent
 
-    attr_reader :show, :title, :airtime
+    attr_reader :show, :title, :airtime, :runtime
 
-    def initialize(show, title, season, number, airtime)
-      @show, @title, @season, @number, @airtime = show, title, season, number, airtime
+    def initialize(show, title, season, number, airtime, runtime)
+      @show, @title, @season, @number, @airtime, @runtime = show, title, season, number, airtime, runtime
     end
 
     def summary
@@ -70,7 +70,8 @@ module WatsOnTv
       number, season = episode['number'], episode['season']
       title, showTitle = episode['title'], show['title']
       air_time_utc = DateTime.parse(episode['first_aired_iso']).new_offset(0)
-      EpisodeEvent.new(showTitle, title, season, number, air_time_utc)
+      runtime = show['runtime'].to_i
+      EpisodeEvent.new(showTitle, title, season, number, air_time_utc, runtime)
     end
 
   end

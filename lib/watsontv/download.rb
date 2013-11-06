@@ -2,6 +2,7 @@
 require 'date'
 require 'watsontv/date'
 require 'watsontv/logging'
+require 'watsontv/filter'
 
 module WatsOnTv
 
@@ -48,10 +49,6 @@ module WatsOnTv
       @torrent_client.add search_result.magnet_link
     end
 
-    def mark_episode_as_downloaded(episode)
-      @download_marker.mark(episode)
-    end
-
     def current_episodes
       @shows_provider.shows_for(CurrentTime.get, 1)
       .select { |e|
@@ -65,8 +62,8 @@ module WatsOnTv
       "#{show_for_term} S#{episode.season}E#{episode.number} #{@search_term_suffix}"
     end
     
-    def filter_search_results(results)
-      results
+    def filter_search_results(episode, results)
+      results.select { |t| SearchResultsFilter.filter(episode, t) }
     end
 
   end
