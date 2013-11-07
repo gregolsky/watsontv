@@ -28,7 +28,7 @@ module WatsOnTv
         term = search_term_for(episode)
         Log.info("Searching for: #{term}")
         results = @search_client.search(term)
-        download_info = filter_search_results(results)[0]
+        download_info = filter_search_results(episode, results)[0]
         
         if not download_info.nil?
           Log.info("Search results:\r\n #{download_info.inspect}")
