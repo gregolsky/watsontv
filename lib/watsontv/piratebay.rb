@@ -6,22 +6,19 @@ module PirateBay
 
   class Client
 
-    @@url = 'http://thepiratebay.se'
+    @@url = 'http://thepiratebay.sx'
 
     def search(term, page = 0)
       encoded_term = URI::Parser.new.escape(term)
       search_url = "#{@@url}/search/#{encoded_term}/#{page}/7/0"
-      web_page = WebPage.new(search_url)
-      web_page.search('table#searchResult tr')
-        .map { |r| map_result_row(r) }
-        .select { |t| t != nil }
+      io = open(search_url)
+      web_page = WebPage.new(search_url, io)
+      ResultsMapper.map(web_page)
     rescue StandardError => e
       raise ClientError.new(web_page, e)
     end
     
-    def map_result_row(row)
-      Torrent.from_table_row(row) unless row.at('a.detLink') == nil
-    end
+
 
   end
   
@@ -66,7 +63,9 @@ module PirateBay
       end
       
       parsedDesc = desc.scan(/Size ([0-9.]*.[A-Za-z]*),/)
-      size = parsedDesc[0][0]
+      if not parsedDesc.nil? and not parsedDesc[0].nil?
+        size = parsedDesc[0][0]
+      end
       
       seed_count = row.search('td')[2].inner_html.chomp.to_i
       leech_count = row.search('td')[3].inner_html.chomp.to_i
@@ -74,6 +73,20 @@ module PirateBay
       Torrent.new(name, magnet_link, size, seed_count, leech_count, uploaded_by)
     end
     
+  end
+  
+  class ResultsMapper
+  
+    def self.map(page)
+      page.search('table#searchResult tr')
+        .map { |r| self.map_result_row(r) }
+        .select { |t| t != nil }
+    end
+    
+    def self.map_result_row(row)
+      Torrent.from_table_row(row) unless row.at('a.detLink') == nil
+    end
+  
   end
 
   class WebPageNode
@@ -96,8 +109,8 @@ module PirateBay
   end
 
   class WebPage < WebPageNode
-    def initialize(url)
-      doc = Nokogiri::HTML(open(url))
+    def initialize(url, content)
+      doc = Nokogiri::HTML(content)
       super(doc)
       @url = url
     end

@@ -15,5 +15,11 @@ class PirateBayApiUnitTests < Test::Unit::TestCase
     assert item.uploaded_by != nil and item.uploaded_by.length > 0
     assert !(item.name.include? "<")
   end
+  
+  def test_results_mapping
+    page = PirateBay::WebPage.new('http://test', open('./test/file_still_uploading.html'))
+    results = PirateBay::ResultsMapper.map page
+    assert results.length > 0
+  end
 
 end
