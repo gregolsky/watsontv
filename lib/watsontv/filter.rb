@@ -16,7 +16,7 @@ module WatsOnTv
       if not runtime.nil? and not size.nil?
          in_gb = size.include? "GiB"
          size_in_mb = size.to_f * (in_gb ? 1000 : 1)
-         estimated_min_size = runtime * 16
+         estimated_min_size = runtime * 10
          
          if estimated_min_size > size_in_mb
            return false
