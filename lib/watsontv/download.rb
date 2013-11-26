@@ -21,7 +21,7 @@ module WatsOnTv
     def manage
       episodes = current_episodes
       
-      Log.info("Current episodes:\r\n #{episodes.inspect}")
+      Log.info("Current episodes: #{ episodes.map { |x| x.inspect } }")
 
       episodes.each do |episode|
 
@@ -31,7 +31,7 @@ module WatsOnTv
         download_info = filter_search_results(episode, results)[0]
         
         if not download_info.nil?
-          Log.info("Search results:\r\n #{download_info.inspect}")
+          Log.info("Search results: #{ download_info.inspect }")
           add_to_download_queue download_info
         else
           Log.info("No results for #{episode.summary}.")
