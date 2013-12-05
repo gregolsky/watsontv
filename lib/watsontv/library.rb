@@ -1,16 +1,16 @@
 
+require 'watsontv/matching'
+
 module WatsOnTv
 
   class Library
   
     def initialize(files)
-      @files = normalize(files)
+      @files = files
     end
     
     def contains?(episode)
-      show_name = normalize_name(episode.show)
-      episode_number = "S#{episode.season}E#{episode.number}"
-      @files.select { |f| match(f, show_name, episode_number) }.any?
+      @files.any? { |f| EpisodeMatcher.matches?(f, episode) }
     end
     
     private
@@ -19,20 +19,6 @@ module WatsOnTv
       f.include?(show) and f.include?(number)      
     end
     
-    def normalize(files)
-      files
-       .map { |f| normalize_name(f) }
-    end
-    
-    def normalize_name(filename)
-      filename
-        .tr('^A-Za-z0-9 .', '')
-        .tr('.', ' ')
-        .gsub(/ +/, ' ')
-        .upcase
-        .chomp
-    end
-  
   end
   
   class LibraryLoader

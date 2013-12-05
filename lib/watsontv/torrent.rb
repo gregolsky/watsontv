@@ -14,5 +14,9 @@ module TorrentClient
       Transmission::RPC::Torrent + magnet
     end
     
+    def list
+      Transmission.torrents
+    end
+    
   end
 end

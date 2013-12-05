@@ -3,6 +3,7 @@ require 'date'
 require 'watsontv/date'
 require 'watsontv/logging'
 require 'watsontv/filter'
+require 'watsontv/matching'
 
 module WatsOnTv
 
@@ -53,8 +54,13 @@ module WatsOnTv
       @shows_provider.shows_for(CurrentTime.get, 1)
       .select { |e|
         !@library.contains?(e) && 
+        !download_queue_contains?(e) &&
         e.airtime + (@hours_after_air_time / 24.0) <= CurrentTime.get
       }
+    end
+    
+    def download_queue_contains?(e)
+      @torrent_client.list.any? { |t| EpisodeMatcher.matches?(t.name, e) }
     end
 
     def search_term_for(episode)
