@@ -4,9 +4,9 @@ require 'watsontv/piratebay'
 
 class PirateBayApiUnitTests < Test::Unit::TestCase
   
-  def test_client_multiple_results
+  def _client_multiple_results
     cli = PirateBay::Client.new
-    result = cli.search('linux')
+    result = cli.search('ubuntu')
     assert result != nil
     assert result.length > 0
 
@@ -17,8 +17,9 @@ class PirateBayApiUnitTests < Test::Unit::TestCase
   end
   
   def test_results_mapping
+    assert File.exists?('./test/file_still_uploading.html')
     page = PirateBay::WebPage.new('http://test', open('./test/file_still_uploading.html'))
-    results = PirateBay::ResultsMapper.map page
+    results = PirateBay::ResultsMapper.map(page)
     assert results.length > 0
   end
 

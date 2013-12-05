@@ -52,7 +52,7 @@ module PirateBay
 
     def Torrent.from_table_row(row)
       name = row.at('a.detLink').inner_html.chomp
-      magnet_link = row.at('a[@title="Download this torrent using magnet"]')['href'].chomp
+      magnet_link = row.at('a[href^=magnet]')['href'].chomp
       
       desc, uploaded_by = row.at('font.detDesc').children.map do |ch|
         if WebPageNode.is_text?(ch)
