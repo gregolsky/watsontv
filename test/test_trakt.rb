@@ -17,4 +17,10 @@ class TraktClientTests < Test::Unit::TestCase
     assert e.airtime.hour == 2
   end
 
+  def test_get_old_episodes
+    c = WatsOnTv::TraktClient.new("1c1079c847bbf1df4fcbf794d9324959", 'gregorl')
+    episodes = c.shows_for(DateTime.parse('2013-12-24'))
+    assert episodes.length == 1
+  end
+
 end

@@ -6,7 +6,7 @@ module PirateBay
 
   class Client
 
-    @@url = 'http://thepiratebay.sx'
+    @@url = 'http://thepiratebay.org'
 
     def search(term, page = 0)
       encoded_term = URI::Parser.new.escape(term)

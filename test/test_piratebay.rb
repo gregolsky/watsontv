@@ -4,7 +4,7 @@ require 'watsontv/piratebay'
 
 class PirateBayApiUnitTests < Test::Unit::TestCase
   
-  def _client_multiple_results
+  def test_client_multiple_results
     cli = PirateBay::Client.new
     result = cli.search('ubuntu')
     assert result != nil
