@@ -51,7 +51,7 @@ module WatsOnTv
     end
 
     def current_episodes
-      @shows_provider.shows_for(CurrentTime.get, 1)
+      @shows_provider.shows_for(CurrentTime.get - 1, 2)
       .select { |e|
         !@library.contains?(e) && 
         !download_queue_contains?(e) &&
