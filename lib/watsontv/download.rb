@@ -41,6 +41,7 @@ module WatsOnTv
       end
     rescue StandardError => error  
       Log.error(error)
+      @notifier.notify(error.to_s, error.to_s + '\r\n' + error.backtrace)
       raise error
     end
 
