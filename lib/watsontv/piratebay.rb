@@ -18,8 +18,6 @@ module PirateBay
       raise ClientError.new(web_page, e)
     end
     
-
-
   end
   
   class ClientError < StandardError

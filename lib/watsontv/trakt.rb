@@ -5,6 +5,19 @@ require 'net/http'
 
 module WatsOnTv
 
+  class ClientError < StandardError
+    
+    def initialize(uri, http_code, http_response)
+      @request_uri = uri
+      @http_code, @http_response = http_code, http_response
+    end
+    
+    def to_s
+      "Error during request for #{@request_uri}\r\n\r\nStatus: #{@http_code}\r\nResponse: #{@http_response}"
+    end
+    
+  end
+
   class TraktClient
 
     def initialize(api_key, user)
@@ -14,8 +27,15 @@ module WatsOnTv
 
     def shows_for(date, days_count = 1)
       uri = calendar_uri(date, days_count)
-      jsonString = Net::HTTP.get(uri)
-      json = JSON.parse(jsonString)
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Get.new(uri.request_uri)
+      response = http.request(request)
+      
+      if response.code.to_i != 200
+        raise ClientError.new(uri, response.code, response.body)
+      end
+      
+      json = JSON.parse(response.body)
       JsonMapper.map_calendar json
     end
 
