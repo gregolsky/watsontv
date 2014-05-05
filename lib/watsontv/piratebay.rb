@@ -1,21 +1,43 @@
 
-require 'open-uri'
 require 'nokogiri'
+require 'net/http'
 
 module PirateBay
 
   class Client
 
-    @@url = 'http://thepiratebay.org'
+    @@url = 'http://thepiratebay.se'
 
     def search(term, page = 0)
       encoded_term = URI::Parser.new.escape(term)
       search_url = "#{@@url}/search/#{encoded_term}/#{page}/7/0"
-      io = open(search_url)
-      web_page = WebPage.new(search_url, io)
+
+      uri = URI.parse search_url
+      http = Net::HTTP.new(uri.host, uri.port)
+      request = Net::HTTP::Get.new(uri.request_uri)
+      response = http.request(request)
+
+      case response
+        when Net::HTTPSuccess then
+          begin
+            if response['Content-Encoding'].eql?('gzip') then
+              io = StringIO.new(response.body)
+              gz = Zlib::GzipReader.new(io)
+              body = gz.read
+            else
+              body = response.body
+            end
+          end
+      end
+
+      if response.code.to_i != 200
+        raise ClientError.new(uri, response.code, response.body)
+      end
+
+      web_page = WebPage.new(search_url, body)
       ResultsMapper.map(web_page)
     rescue StandardError => e
-      raise ClientError.new(web_page, e)
+      raise ClientError.new(search_url, response.code, response.body, e)
     end
     
   end
@@ -24,8 +46,10 @@ module PirateBay
     
     attr_reader :page, :error
     
-    def initialize(page, error)
-      @page = page
+    def initialize(url, status_code, body, error = nil)
+      @page = body
+      @status_code = status_code
+      @url = url
       @error = error
     end
     
