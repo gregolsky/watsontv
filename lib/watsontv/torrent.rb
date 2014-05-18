@@ -10,8 +10,11 @@ module TorrentClient
       end
     end
     
-    def add(magnet)
-      Transmission::RPC::Torrent + magnet
+    def add(download_info)
+      Transmission::RPC::Torrent.add({
+        :filename => download_info.magnet,
+        :download_dir => download_info.download_directory
+      });
     end
     
     def list

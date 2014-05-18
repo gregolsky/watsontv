@@ -12,6 +12,7 @@ module WatsOnTv
     def initialize(cfg, shows_provider, library, search_client, torrent_client, notifier)
       @hours_after_air_time = cfg['hours after air time'].to_i;
       @search_term_suffix = cfg['search term suffix']
+      @download_directory = cfg['download directory']
       @shows_provider = shows_provider
       @library = library
       @search_client = search_client
@@ -33,7 +34,8 @@ module WatsOnTv
         
         if not download_info.nil?
           Log.info("Search results: #{ download_info.inspect }")
-          add_to_download_queue download_info
+          download_directory = show_download_directory(episode)
+          add_to_download_queue(download_info, download_directory)
         else
           Log.info("No results for #{episode.summary}.")
           @notifier.notify("#{episode.summary} could not be found.", "")
@@ -47,8 +49,21 @@ module WatsOnTv
 
     private
 
-    def add_to_download_queue(search_result)
-      @torrent_client.add search_result.magnet_link
+    def add_to_download_queue(search_result, download_directory)
+      @torrent_client.add({
+        :magnet => search_result.magnet,
+        :download_directory => episode_download_directory        
+      })
+    end
+
+    def show_download_directory(episode)
+      episode_download_directory = File.join(@download_directory, episode.show)
+
+      if not File.exists? episode_download_directory
+        Dir.mkdir episode_download_directory
+      end
+
+      episode_download_directory
     end
 
     def current_episodes
