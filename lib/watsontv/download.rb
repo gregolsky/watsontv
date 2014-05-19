@@ -50,8 +50,7 @@ module WatsOnTv
     private
 
     def add_to_download_queue(search_result, download_directory)
-      @torrent_client.add({
-        :magnet => search_result.magnet_link,
+      @torrent_client.add(search_result.magnet_link, {
         :download_directory => download_directory        
       })
     end
