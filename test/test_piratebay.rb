@@ -6,7 +6,7 @@ class PirateBayApiUnitTests < Test::Unit::TestCase
   
   def test_client_multiple_results
     cli = PirateBay::Client.new
-    result = cli.search('linux')
+    result = cli.search('ubuntu 14.04')
     assert result != nil
     assert result.length > 0
 

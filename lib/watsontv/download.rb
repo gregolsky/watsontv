@@ -50,19 +50,19 @@ module WatsOnTv
     private
 
     def add_to_download_queue(search_result, download_directory)
-      @torrent_client.add(search_result.magnet_link, {
+      @torrent_client.add(search_result, {
         :download_directory => download_directory        
       })
     end
 
     def show_download_directory(episode)
-      episode_download_directory = File.join(@download_directory, episode.show)
+      show_download_directory = File.join(@download_directory, episode.show)
 
-      if not File.exists? episode_download_directory
-        Dir.mkdir episode_download_directory
+      if not File.exists? show_download_directory
+        Dir.mkdir show_download_directory
       end
 
-      episode_download_directory
+      show_download_directory
     end
 
     def current_episodes

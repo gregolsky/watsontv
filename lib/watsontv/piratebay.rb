@@ -23,7 +23,7 @@ module PirateBay
             if response['Content-Encoding'].eql?('gzip') then
               io = StringIO.new(response.body)
               gz = Zlib::GzipReader.new(io)
-              body = gz.read
+              body = gz.read('utf-8')
             else
               body = response.body
             end
@@ -84,7 +84,7 @@ module PirateBay
         end
       end
       
-      parsedDesc = desc.scan(/Size ([0-9.]*.[A-Za-z]*),/)
+      parsedDesc = desc.scan(/Size ([0-9.]*(&#160;| )[A-Za-z]*),/)
       if not parsedDesc.nil? and not parsedDesc[0].nil?
         size = parsedDesc[0][0]
       end
