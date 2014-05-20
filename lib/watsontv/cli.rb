@@ -17,7 +17,7 @@ module CommandLine
     end
 
     def run
-      `@cmd`
+      `#{@cmd}`
     end
 
   end
