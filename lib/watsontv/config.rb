@@ -1,4 +1,6 @@
 
+require 'yaml'
+
 module WatsOnTv
 
   class Config
@@ -36,7 +38,4 @@ module WatsOnTv
     end
 
   end
-
-
-
 end
