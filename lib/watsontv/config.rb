@@ -1,5 +1,7 @@
 
+require 'watsontv/date'
 require 'yaml'
+require 'date'
 
 module WatsOnTv
 
@@ -33,8 +35,20 @@ module WatsOnTv
       if File.exists? path
         cfg = YAML.load_file(path)
       else
-        create
+        cfg = create
       end
+
+      if ARGV.length > 0
+        date = DateTime.parse(ARGV[0])
+        if date.nil?
+          raise ArgumentError.new('Date not recognized')
+        end
+
+        get_date = lambda { date }
+        CurrentTime.setup(get_date)
+      end
+
+      cfg
     end
 
   end

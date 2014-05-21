@@ -15,7 +15,5 @@
    s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
    s.require_paths = ["lib"]
 
-   s.add_dependency('trollop')
    s.add_dependency('nokogiri')
-   s.add_dependency('transmission-rpc')
  end

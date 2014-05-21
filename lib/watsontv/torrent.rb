@@ -14,7 +14,11 @@ module TorrentClient
     def add(torrent, options)
       run_command({ '-a' => torrent.magnet_link })
       item = list.select { |t| t.name == torrent.name }[0]
-      run_command({ '-t' => item.id, '--move' => options.download_directory })
+      if item.nil?
+        raise StandardError.new(list.inspect + torrent.inspect)
+      end
+
+      run_command({ '-t' => item.id, '--move' => options[:download_directory] })
     end
     
     def list
@@ -44,8 +48,12 @@ module TorrentClient
       rows[1..-2].map { |r|
         r.split(' ')
       }.map { |fields| 
-        OutputEntry.new(fields[0], fields[8])
+        OutputEntry.new(fields[0], self.normalize(fields[8]))
       }
+    end
+
+    def self.normalize(name)
+      name.gsub(/\+/, ' ')
     end
 
     class OutputEntry

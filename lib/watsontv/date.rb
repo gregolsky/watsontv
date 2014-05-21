@@ -9,6 +9,10 @@ module WatsOnTv
       @@get_date.call
     end
 
+    def self.setup(get_date)
+      @@get_date = get_date
+    end
+
   end
 
 end

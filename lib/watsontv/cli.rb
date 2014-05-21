@@ -4,7 +4,7 @@ module CommandLine
 
     def self.format_command(cmd, options)
       result = cmd
-      options.each { |o, v| result += " #{o} \"#{v}\"" }
+      options.each { |o, v| result += " #{o} #{ (v.nil? or v.empty?) ? '' : '"' + v + '"' }" }
       result
     end
     

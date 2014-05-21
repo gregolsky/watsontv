@@ -1,5 +1,4 @@
 
-require 'date'
 require 'watsontv/date'
 require 'watsontv/logging'
 require 'watsontv/filter'
@@ -23,7 +22,7 @@ module WatsOnTv
     def manage
       episodes = current_episodes
       
-      Log.info("Current episodes: #{ episodes.map { |x| x.inspect } }")
+      Log.info("Episodes@#{ CurrentTime.get }: #{ episodes.map { |x| x.inspect } }")
 
       episodes.each do |episode|
 
