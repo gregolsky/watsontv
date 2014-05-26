@@ -21,6 +21,8 @@ class TorrentClientUnitTests < Test::Unit::TestCase
     result = TorrentClient::ListOutputParser.parse(File.open('test/transmission_list_output.txt').read)
 
     assert_equal(1, result.length, result.inspect)
+    assert_equal('41', result[0].id)
+    assert_equal('Damn Small Linux (DSL) v4.4.10', result[0].name)
   end
   
 end
