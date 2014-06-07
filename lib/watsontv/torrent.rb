@@ -14,7 +14,7 @@ module TorrentClient
     def add(torrent, options)
       run_command({ '-a' => torrent.magnet_link })
 
-      list_output = run_command({ '-l' => '' })
+      output = run_command({ '-l' => '' })
       list = parse_list output
 
       item = list.select { |t| t.name == torrent.name }[0]
