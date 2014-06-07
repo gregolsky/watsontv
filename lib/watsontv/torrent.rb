@@ -25,7 +25,7 @@ module TorrentClient
       run_command({ '-t' => item.id, '--move' => options[:download_directory] })
     end
 
-    def list
+    def list(output)
       list_output = run_command({ '-l' => '' })
       parse_list output
     end
