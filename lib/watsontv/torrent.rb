@@ -13,17 +13,16 @@ module TorrentClient
     
     def add(torrent, options)
       run_command({ '-a' => torrent.magnet_link })
+
+      list_output = run_command({ '-l' => '' })
+      list = parse_list output
+
       item = list.select { |t| t.name == torrent.name }[0]
       if item.nil?
-        raise StandardError.new(list.inspect + torrent.inspect)
+        raise StandardError.new("Torrent: #{torrent.inspect} is missing from #{list.inspect}.\nThe list output is: #{output}")
       end
 
       run_command({ '-t' => item.id, '--move' => options[:download_directory] })
-    end
-    
-    def list
-      output = run_command({ '-l' => '' })
-      parse_list output
     end
     
     def parse_list(output)
