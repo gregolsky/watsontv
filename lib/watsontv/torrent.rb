@@ -26,7 +26,7 @@ module TorrentClient
     end
 
     def list
-      list_output = run_command({ '-l' => '' })
+      output = run_command({ '-l' => '' })
       parse_list output
     end
     
