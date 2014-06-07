@@ -49,9 +49,11 @@ module TorrentClient
         return []
       end
 
-      rows[1..-2].map { |r|
-        r.split(' ')
-      }.map { |fields| 
+      rows[1..-2]
+      .map { |r|
+        r.split(/[\s]{2,}/).select { |t| t != "" }
+      }
+      .map { |fields| 
         OutputEntry.new(fields[0], self.normalize(fields[8]))
       }
     end
